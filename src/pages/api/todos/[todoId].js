@@ -21,8 +21,12 @@ const handler = async (req, res) => {
 
   // PATCH /todos/[todoId] -> update resource item
   if (req.method === "PATCH") {
-    const { description } = req.body
-    const newTodo = { ...todo, description }
+    const { description, category } = req.body
+    const newTodo = {
+      ...todo,
+      description: description ?? todo.description,
+      category: category ?? todo.category,
+    }
 
     await writeDatabase({
       ...db,

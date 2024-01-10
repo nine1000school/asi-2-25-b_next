@@ -4,9 +4,16 @@ import { writeDatabase } from "@/database/writeDatabase"
 const handler = async (req, res) => {
   // GET /todos -> read resource collection
   if (req.method === "GET") {
+    const { category } = req.query
     const { todos } = await readDatabase()
+    const result = Object.values(todos)
 
-    res.send(Object.values(todos))
+    res.send(
+      (category
+        ? result.filter((todo) => todo.category === category)
+        : result
+      ).toReversed(),
+    )
 
     return
   }
@@ -15,9 +22,11 @@ const handler = async (req, res) => {
   if (req.method === "POST") {
     const db = await readDatabase()
     const newLastId = db.lastId + 1
+    const { description, category } = req.body
     const newTodo = {
       id: newLastId,
-      description: req.body.description,
+      description,
+      category,
     }
     const newDatabase = {
       ...db,
