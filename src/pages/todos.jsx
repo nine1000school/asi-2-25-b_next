@@ -1,5 +1,8 @@
+import { Button } from "@/components/Button"
+import { FormField } from "@/components/FormField"
 import axios from "axios"
-import { Field, Form, Formik } from "formik"
+import { Form, Formik } from "formik"
+import Link from "next/link"
 import { useState } from "react"
 import * as yup from "yup"
 
@@ -40,28 +43,18 @@ const TodosPage = (props) => {
         onSubmit={handleSubmit}
       >
         <Form noValidate className="flex flex-col gap-4">
-          <Field
-            name="description"
-            className="border-2 p-2"
-            placeholder="Description"
-          />
-          <Field
-            name="category"
-            className="border-2 p-2"
-            placeholder="Category"
-          />
-          <button
-            type="submit"
-            className="bg-indigo-600 active:bg-indigo-700 text-white px-3 py-2 font-semibold"
-          >
-            ADD
-          </button>
+          <FormField name="description" placeholder="Description" />
+          <FormField name="category" placeholder="Category" />
+          <Button type="submit">ADD</Button>
         </Form>
       </Formik>
       <ul className="p-8">
         {todos.map((todo, index) => (
           <li key={index}>
-            - #{todo.id} {todo.description} ({todo.category})
+            -{" "}
+            <Link href={`/todos/${todo.id}/edit`}>
+              #{todo.id} {todo.description} ({todo.category})
+            </Link>
           </li>
         ))}
       </ul>

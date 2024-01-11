@@ -1,10 +1,20 @@
-export const getServerSideProps = ({ params: { todoId } }) => ({
-  props: { todoId },
-})
-const TodoPage = (props) => {
-  const { todoId } = props
+import axios from "axios"
 
-  return <h1 className="text-2xl">#{todoId}</h1>
+export const getServerSideProps = async ({ params: { todoId } }) => {
+  const { data: todo } = await axios(
+    `http://localhost:3000/api/todos/${todoId}`,
+  )
+
+  return {
+    props: { todo },
+  }
 }
+const TodoPage = ({ todo }) => (
+  <>
+    <h1 className="text-2xl">#{todo.id}</h1>
+    <p>Description: {todo.description}</p>
+    <p>Category: {todo.category}</p>
+  </>
+)
 
 export default TodoPage
