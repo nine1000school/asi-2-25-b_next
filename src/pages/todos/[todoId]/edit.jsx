@@ -1,7 +1,8 @@
 import { Button } from "@/components/Button"
+import { Form } from "@/components/Form"
 import { FormField } from "@/components/FormField"
 import axios from "axios"
-import { Form, Formik } from "formik"
+import { Formik } from "formik"
 import { useRouter } from "next/router"
 import * as yup from "yup"
 
@@ -33,7 +34,7 @@ const TodoEditPage = ({ todo }) => {
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
-      <Form noValidate>
+      <Form>
         <FormField name="description" placeholder="Description" />
         <FormField name="category" placeholder="Description" />
         <Button type="submit">SAVE</Button>

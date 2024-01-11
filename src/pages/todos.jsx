@@ -1,7 +1,8 @@
 import { Button } from "@/components/Button"
+import { Form } from "@/components/Form"
 import { FormField } from "@/components/FormField"
 import axios from "axios"
-import { Form, Formik } from "formik"
+import { Formik } from "formik"
 import Link from "next/link"
 import { useState } from "react"
 import * as yup from "yup"
@@ -42,7 +43,7 @@ const TodosPage = (props) => {
         initialValues={initialValues}
         onSubmit={handleSubmit}
       >
-        <Form noValidate className="flex flex-col gap-4">
+        <Form>
           <FormField name="description" placeholder="Description" />
           <FormField name="category" placeholder="Category" />
           <Button type="submit">ADD</Button>
