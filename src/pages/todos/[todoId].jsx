@@ -11,8 +11,7 @@ export const getServerSideProps = async ({ params: { todoId } }) => {
 }
 const TodoPage = ({ todo }) => (
   <>
-    <h1 className="text-2xl">#{todo.id}</h1>
-    <p>Description: {todo.description}</p>
+    <h1 className="text-2xl font-semibold">Description: {todo.description}</h1>
     <p>Category: {todo.category}</p>
   </>
 )

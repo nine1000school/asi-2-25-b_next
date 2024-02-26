@@ -53,8 +53,8 @@ const TodosPage = (props) => {
         {todos.map((todo, index) => (
           <li key={index}>
             -{" "}
-            <Link href={`/todos/${todo.id}/edit`}>
-              #{todo.id} {todo.description} ({todo.category})
+            <Link href={`/todos/${todo._id}/edit`}>
+              {todo.description} ({todo.category})
             </Link>
           </li>
         ))}

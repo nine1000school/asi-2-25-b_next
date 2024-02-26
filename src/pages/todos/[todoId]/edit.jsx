@@ -22,10 +22,10 @@ const validationSchema = yup.object({
 const TodoEditPage = ({ todo }) => {
   const router = useRouter()
   const initialValues = todo
-  const handleSubmit = async ({ id, description, category }) => {
-    await axios.patch(`/api/todos/${id}`, { description, category })
+  const handleSubmit = async ({ _id, description, category }) => {
+    await axios.patch(`/api/todos/${_id}`, { description, category })
 
-    router.push(`/todos/${id}`)
+    router.push(`/todos/${_id}`)
   }
 
   return (
