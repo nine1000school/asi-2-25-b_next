@@ -1,46 +1,29 @@
-import { readDatabase } from "@/database/readDatabase"
-import { writeDatabase } from "@/database/writeDatabase"
+import { createRoute } from "@/api/createRoute"
+import { TodoModel } from "@/database/models/TodoModel"
 
-const handler = async (req, res) => {
+const handler = createRoute(async (req, res) => {
   // GET /todos -> read resource collection
   if (req.method === "GET") {
     const { category } = req.query
-    const { todos } = await readDatabase()
-    const result = Object.values(todos)
+    const todos = await TodoModel.find(category ? { category } : {})
 
-    res.send(
-      (category
-        ? result.filter((todo) => todo.category === category)
-        : result
-      ).toReversed(),
-    )
+    res.send(todos)
 
     return
   }
 
   // POST /todos -> create resource
   if (req.method === "POST") {
-    const db = await readDatabase()
-    const newLastId = db.lastId + 1
     const { description, category } = req.body
-    const newTodo = {
-      id: newLastId,
+    const newTodo = new TodoModel({
       description,
       category,
-    }
-    const newDatabase = {
-      ...db,
-      lastId: newLastId,
-      todos: {
-        ...db.todos,
-        [newLastId]: newTodo,
-      },
-    }
+    })
 
-    await writeDatabase(newDatabase)
+    await newTodo.save()
 
     res.send(newTodo)
   }
-}
+})
 
 export default handler
