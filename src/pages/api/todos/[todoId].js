@@ -1,10 +1,9 @@
-import { readDatabase } from "@/database/readDatabase"
-import { writeDatabase } from "@/database/writeDatabase"
+import { createRoute } from "@/api/createRoute"
+import { TodoModel } from "@/database/models/TodoModel"
 
-const handler = async (req, res) => {
+const handler = createRoute(async (req, res) => {
   const { todoId } = req.query
-  const db = await readDatabase()
-  const todo = db.todos[todoId]
+  const todo = await TodoModel.findById(todoId)
 
   if (!todo) {
     res.status(404).send({ error: "not found" })
@@ -22,39 +21,28 @@ const handler = async (req, res) => {
   // PATCH /todos/[todoId] -> update resource item
   if (req.method === "PATCH") {
     const { description, category } = req.body
-    const newTodo = {
-      ...todo,
-      description: description ?? todo.description,
-      category: category ?? todo.category,
+
+    if (description) {
+      todo.description = description
     }
 
-    await writeDatabase({
-      ...db,
-      todos: {
-        ...db.todos,
-        [todoId]: newTodo,
-      },
-    })
+    if (category) {
+      todo.category = category
+    }
 
-    res.send(newTodo)
+    await todo.save()
+
+    res.send(todo)
 
     return
   }
 
   // DELETE /todos/[todoId] -> delete resource item
   if (req.method === "DELETE") {
-    const {
-      // eslint-disable-next-line no-unused-vars
-      todos: { [todoId]: _, ...todos },
-    } = db
-
-    await writeDatabase({
-      ...db,
-      todos,
-    })
+    await todo.deleteOne()
 
     res.send(todo)
   }
-}
+})
 
 export default handler
