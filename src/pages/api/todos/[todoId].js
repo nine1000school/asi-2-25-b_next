@@ -20,15 +20,13 @@ const handler = createRoute(async (req, res) => {
 
   // PATCH /todos/[todoId] -> update resource item
   if (req.method === "PATCH") {
-    const { description, category } = req.body
+    const { description, category, isDone } = req.body
 
-    if (description) {
-      todo.description = description
-    }
-
-    if (category) {
-      todo.category = category
-    }
+    Object.assign(todo, {
+      description: description || todo.description,
+      category: category || todo.category,
+      isDone: isDone ?? todo.isDone,
+    })
 
     await todo.save()
 

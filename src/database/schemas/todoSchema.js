@@ -9,4 +9,5 @@ export const todoSchema = new Schema({
     type: String,
     default: "Todo",
   },
+  isDone: Boolean,
 })
