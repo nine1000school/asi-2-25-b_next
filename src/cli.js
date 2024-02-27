@@ -1,12 +1,17 @@
 import axios from "axios"
 import chalk from "chalk"
 
+const noop = (x) => x
 const apiClient = axios.create({
   baseURL: "http://localhost:3000/api",
 })
-const printTodo = ({ _id, description, category }) =>
+const printTodo = ({ _id, description, category, isDone }) =>
   // eslint-disable-next-line no-console
-  console.log(`${chalk.bgBlue(_id)} ${description} ${chalk.bgWhite(category)}`)
+  console.log(
+    `${chalk.bgBlue(_id)} ${(isDone ? chalk.strikethrough : noop)(
+      description,
+    )} ${chalk.bgWhite(category)}`,
+  )
 const [commandName, ...args] = process.argv.slice(2)
 const commands = {
   add: async (description, category) => {
@@ -35,7 +40,14 @@ const commands = {
 
     printTodo(todo)
   },
-  toggle: async () => {},
+  toggle: async (id) => {
+    const { data: todo } = await apiClient(`/todos/${id}`)
+    const { data: updatedTodo } = await apiClient.patch(`/todos/${id}`, {
+      isDone: !todo.isDone,
+    })
+
+    printTodo(updatedTodo)
+  },
 }
 const command = commands[commandName]
 
